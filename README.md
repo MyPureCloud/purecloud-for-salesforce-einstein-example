@@ -1,0 +1,2 @@
+# purecloud-for-salesforce-einstein-example
+This project demonstrates how to use an endpoint exposed in PureCloud for Salesforce to receive incoming chat messages, search Salesforce Einstein for the intent, and use that intent to search and display relevant Salesforce Knowledge articles in a Salesforce Lightning component. The project includes a sample dataset to train Salesforce Einstein and some sample Knowledge articles to provide a working end to end example
