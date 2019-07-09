@@ -1,0 +1,30 @@
+.THIS {
+    background: #fff;
+    padding: 13px;
+}
+.THIS h1 {
+    font-weight: bold;
+    margin-bottom: 5px;
+    font-size: 13px;
+}
+.THIS .result-count {
+    font-size: 0.9em;
+    display: inline-block;
+    margin: 5px 0 15px;
+	color: rgb(62, 62, 60);
+}
+.THIS .article-link-button {
+    background: none;
+    border: none;
+    border-bottom: 1px dotted;
+    color: rgb(0, 109, 204);
+    text-align: left;
+    padding: 0;
+}
+.THIS .article-number {
+    font-size: 0.9em;
+    color: rgb(62, 62, 60);
+}
+.THIS hr {
+	margin: 0.5rem 0;
+}

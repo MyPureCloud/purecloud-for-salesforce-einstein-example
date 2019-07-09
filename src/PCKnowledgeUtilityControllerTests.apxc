@@ -1,0 +1,172 @@
+@isTest
+private class PCKnowledgeUtilityControllerTests {
+
+    public static testMethod void testgetCallCenterURL() {
+        
+        CallCenter cc = [Select Id, AdapterUrl From CallCenter Where InternalName = 'PureCloudForSalesforceLightning' Limit 1];
+        Profile p = [SELECT Id FROM Profile WHERE Name='Standard User'];
+        
+        User userObj = new User();
+        userObj.Email = 'unit.test@pccrmwebclient.com';
+        userObj.Username = 'unit.test@pccrmwebclient.com';
+        userObj.CallCenterId = cc.Id;
+        userObj.LastName = 'Unit';
+        userObj.Alias = 'unit';
+        userObj.TimeZoneSidKey = 'America/Los_Angeles';
+        userObj.LocaleSidKey = 'en_US';
+        userObj.EmailEncodingKey = 'UTF-8';
+        userObj.ProfileId = p.Id;
+        userObj.LanguageLocaleKey = 'en_US';
+        insert userObj;
+        
+        System.runAs(userObj) {
+            String returnedURL = PCKnowledgeUtilityController.getCallCenterUrl();
+            System.assertEquals(returnedUrl, cc.AdapterUrl);
+        }
+    }
+    
+    public static testMethod void testGetCallCenterURLFails() {
+        
+        Profile p = [SELECT Id FROM Profile WHERE Name='Standard User'];
+
+        User userObj = new User();
+        userObj.Email = 'unit.test@pccrmwebclient.com';
+        userObj.Username = 'unit.test@pccrmwebclient.com';
+        userObj.LastName = 'Unit';
+        userObj.Alias = 'unit';
+        userObj.TimeZoneSidKey = 'America/Los_Angeles';
+        userObj.LocaleSidKey = 'en_US';
+        userObj.EmailEncodingKey = 'UTF-8';
+        userObj.ProfileId = p.Id;
+        userObj.LanguageLocaleKey = 'en_US';
+        insert userObj;
+        
+        System.runAs(userObj) {
+            try {
+                String returnedURL = PCKnowledgeUtilityController.getCallCenterUrl();
+                System.assert(false);
+            } catch(exception e) {
+               System.assert(true); 
+            }
+        }
+    }
+    
+    public static testMethod void testSearchKnowledge() {
+        
+       	Knowledge__kav knowledgeArticle = new Knowledge__kav();
+        knowledgeArticle.Title = 'How to Change Billing and Shipping Info';
+        knowledgeArticle.UrlName = 'How-to-Change-Billing-and-Shipping-Info-test';
+        knowledgeArticle.Summary = 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.';
+        knowledgeArticle.ArticleBody__c = 'How to Change Billing and Shipping Info';
+        insert knowledgeArticle;
+        
+        Knowledge__kav obj1 = [SELECT Id,Title,KnowledgeArticleId FROM knowledge__kav WHERE id =: knowledgeArticle.Id];
+        KbManagement.PublishingService.publishArticle(obj1.KnowledgeArticleId, true);
+        
+        Id [] fixedSearchResults = new Id[1];
+        fixedSearchResults[0] = knowledgeArticle.Id;
+        Test.setFixedSearchResults(fixedSearchResults);
+       
+        String searchString = 'Change Billing and Shipping';
+        String searchResults = PCKnowledgeUtilityController.searchKnowledge(searchString); 
+        
+        boolean isNameFound = false;
+        JSONParser parser = JSON.createParser(searchResults);
+        while(parser.nextToken() != null) {
+            if(parser.getCurrentToken() == JSONToken.FIELD_NAME) {
+                if(parser.getText() == 'title') {
+                    parser.nextToken();
+                    isNameFound = parser.getText().equalsIgnoreCase('How to Change Billing and Shipping Info');
+                }
+            }
+        }
+        System.assert(isNameFound);
+    }
+    
+    public static testMethod void testCalculateChatIntent() {
+        
+        ContentVersion cv = new ContentVersion();
+        cv.Title = 'einstein_platform';
+        cv.PathOnClient = 'einstein_platform.pem';
+        Blob b = EncodingUtil.base64Decode('This is Version Data');
+        cv.VersionData = Blob.valueOf('This is Version Data');
+        insert cv;
+        
+        Test.setMock(HttpCalloutMock.class, new SalesforceHttpCalloutMock());
+        string chat = 'can you help with my billing';
+        Test.startTest();
+        List<Object> listOfIntents = PCKnowledgeUtilityController.calculateChatIntent(chat); 
+        Test.stopTest();
+        System.assert(listOfIntents.size() == 2);
+    }
+    
+    public static testMethod void testCalculateChatIntentNoPemFile() {
+        
+        try {
+            Test.setMock(HttpCalloutMock.class, new SalesforceHttpCalloutMock());
+            string chat = 'can you help with my billing';
+            Test.startTest();
+            List<Object> listOfIntents = PCKnowledgeUtilityController.calculateChatIntent(chat); 
+            Test.stopTest();
+            System.assert(false);
+        } catch(Exception e) {
+            System.assert(true);
+        } 
+    }
+    
+    public static testMethod void testBadServerResponse() {
+        
+        ContentVersion cv = new ContentVersion();
+        cv.Title = 'einstein_platform';
+        cv.PathOnClient = 'einstein_platform.pem';
+        Blob b = EncodingUtil.base64Decode('This is Version Data');
+        cv.VersionData = Blob.valueOf('This is Version Data');
+        insert cv;
+        
+        try {
+            Test.setMock(HttpCalloutMock.class, new FailedHttpCalloutMock());
+            string chat = 'can you help with my billing';
+            Test.startTest();
+            List<Object> listOfIntents = PCKnowledgeUtilityController.calculateChatIntent(chat); 
+            Test.stopTest();
+            System.assert(false);
+        } catch(Exception e) {
+            System.assert(true);
+        }
+    }
+       
+    public class SalesforceHttpCalloutMock implements HttpCalloutMock {
+        
+        public HttpResponse respond(HttpRequest req) { 
+            HttpResponse res = new HttpResponse();
+            res.setHeader('Content-type', 'application/json');
+            res.setStatusCode(200);
+            res.setStatus('OK');
+            if(req.getEndpoint() == 'https://api.einstein.ai/v2/language/intent') {
+                res.setBody('{\"probabilities\":[{\"label\": \"How to Review Purchase History\", \"probability\": 0.21420689},'+ 
+                            '{\"label\": \"How to Review Purchase History\", \"probability\": 0.21420689}] }');                           
+            } if(req.getEndpoint() == 'https://api.einstein.ai/v2/oauth2/token') {
+                res.setBody('{\"access_token\" : \"foobar\"}');
+            }  
+            return res;
+        }
+    }
+    
+    public class FailedHttpCalloutMock implements HttpCalloutMock {
+        
+        public HttpResponse respond(HttpRequest req) { 
+            HttpResponse res = new HttpResponse();
+            res.setHeader('Content-type', 'application/json');
+            if(req.getEndpoint() == 'https://api.einstein.ai/v2/language/intent') {
+                res.setStatusCode(404);
+                res.setStatus('Not Found');
+                res.setBody('{}');                           
+            } if(req.getEndpoint() == 'https://api.einstein.ai/v2/oauth2/token') {
+                res.setStatusCode(200);
+                res.setStatus('OK');
+                res.setBody('{\"access_token\" : \"foobar\"}');
+            }  
+            return res;
+        }
+    }
+}
