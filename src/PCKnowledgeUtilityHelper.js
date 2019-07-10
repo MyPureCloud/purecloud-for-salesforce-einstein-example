@@ -18,7 +18,7 @@
                 component.set('v.knowledgeArticles', articles.data);
                 component.set('v.numResults', articles.data.length);
             } else {
-                handleResponseError("Error searching knowledge: ", response);
+                this.handleResponseError("Error searching knowledge: ", response);
                 this.clear(component);
             }
         });
@@ -47,7 +47,7 @@
                     this.clear(component);
                 }
             } else {
-                handleResponseError("Error getting chat probabilities: ", response);
+                this.handleResponseError("Error getting chat probabilities: ", response);
             }
         });
         $A.enqueueAction(action);
