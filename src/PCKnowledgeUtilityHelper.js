@@ -18,7 +18,7 @@
                 component.set('v.knowledgeArticles', articles.data);
                 component.set('v.numResults', articles.data.length);
             } else {
-                console.error('### Error searching knowledge');
+                handleResponseError("Error searching knowledge: ", response);
                 this.clear(component);
             }
         });
@@ -47,10 +47,7 @@
                     this.clear(component);
                 }
             } else {
-                var errors = response.getError();
-                errors.forEach(function(error) {
-                    console.error("### response error:", error.message);
-                });
+                handleResponseError("Error getting chat probabilities: ", response);
             }
         });
         $A.enqueueAction(action);
@@ -59,5 +56,12 @@
     clear : function(component) {
         component.set('v.knowledgeArticles', []);
         component.set('v.numResults', 0);
+    },
+
+    handleResponseError: function(errorMsg, response) {
+        var errors = response.getError();
+        errors.forEach(function(error) {
+            console.error(errorMsg, error.message);
+        });
     }
 })

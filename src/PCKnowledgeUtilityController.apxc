@@ -24,7 +24,7 @@ public with sharing class PCKnowledgeUtilityController {
     @AuraEnabled
     public static String searchKnowledge(String searchValue) {
         String results = '';
-        if(searchValue.length() > 1) {
+        if(searchValue.length() > 3) {
             String searchString = 'FIND \'' + String.escapeSingleQuotes(searchValue) + '\' IN ALL FIELDS RETURNING Knowledge__kav(Id, Title, ArticleNumber LIMIT 10)';
             List<List<SObject>> searchList = search.query(searchString);
             
