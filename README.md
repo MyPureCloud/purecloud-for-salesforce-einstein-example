@@ -39,7 +39,7 @@ Install the unmanaged package.
 
 ### Set Up Salesforce Knowledge
 1. [Enable Salesforce Knowledge](https://developer.salesforce.com/docs/atlas.en-us.knowledge_dev.meta/knowledge_dev/knowledge_development_setup_enable.htm).
-2. Import Salesforce Knowledge articles from the **simple-sample-knowledge-articles.csv** file.
+2. Import Salesforce Knowledge articles from the [simple-sample-knowledge-articles.csv](resources/knowledge%20articles/simple-sample-knowledge-articles.csv) file.
 
   You can import articles one of two ways:
    * Use [Import Articles](https://help.salesforce.com/articleView?id=knowledge_article_importer.htm&type=5) in Salesforce.
@@ -55,7 +55,7 @@ Install the unmanaged package.
 
 
 ### Train Salesforce Einstein
-These steps use the example dataset in the sample-knowledge-articles-dataset.csv file. The following API calls and information come from the  [Salesforce Einstein documentation](https://metamind.readme.io/docs/create-a-lang-dataset-from-file).
+These steps use the example dataset in the [einstein-example-dataset copy.csv](resources/einstein-example-dataset%20copy.csv) file. The following API calls and information come from the  [Salesforce Einstein documentation](https://metamind.readme.io/docs/create-a-lang-dataset-from-file).
 1. Generate an OAuth token to use in the API calls.
   1. Go to [Generate an OAuth token](https://api.einstein.ai/token).
   2. Enter your credentials for Einstein and the key from the **einstein_platform.pem** file.
