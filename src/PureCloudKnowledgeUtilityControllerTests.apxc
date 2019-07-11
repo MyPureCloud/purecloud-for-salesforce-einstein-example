@@ -1,5 +1,5 @@
 @isTest
-private class PCKnowledgeUtilityControllerTests {
+private class PureCloudKnowledgeUtilityControllerTests {
 
     public static testMethod void testgetCallCenterURL() {
         
@@ -20,7 +20,7 @@ private class PCKnowledgeUtilityControllerTests {
         insert userObj;
         
         System.runAs(userObj) {
-            String returnedURL = PCKnowledgeUtilityController.getCallCenterUrl();
+            String returnedURL = PureCloudKnowledgeUtilityController.getCallCenterUrl();
             System.assertEquals(returnedUrl, cc.AdapterUrl);
         }
     }
@@ -43,46 +43,14 @@ private class PCKnowledgeUtilityControllerTests {
         
         System.runAs(userObj) {
             try {
-                String returnedURL = PCKnowledgeUtilityController.getCallCenterUrl();
+                String returnedURL = PureCloudKnowledgeUtilityController.getCallCenterUrl();
                 System.assert(false);
             } catch(exception e) {
                System.assert(true); 
             }
         }
     }
-    
-    public static testMethod void testSearchKnowledge() {
         
-       	Knowledge__kav knowledgeArticle = new Knowledge__kav();
-        knowledgeArticle.Title = 'How to Change Billing and Shipping Info';
-        knowledgeArticle.UrlName = 'How-to-Change-Billing-and-Shipping-Info-test';
-        knowledgeArticle.Summary = 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.';
-        knowledgeArticle.ArticleBody__c = 'How to Change Billing and Shipping Info';
-        insert knowledgeArticle;
-        
-        Knowledge__kav obj1 = [SELECT Id,Title,KnowledgeArticleId FROM knowledge__kav WHERE id =: knowledgeArticle.Id];
-        KbManagement.PublishingService.publishArticle(obj1.KnowledgeArticleId, true);
-        
-        Id [] fixedSearchResults = new Id[1];
-        fixedSearchResults[0] = knowledgeArticle.Id;
-        Test.setFixedSearchResults(fixedSearchResults);
-       
-        String searchString = 'Change Billing and Shipping';
-        String searchResults = PCKnowledgeUtilityController.searchKnowledge(searchString); 
-        
-        boolean isNameFound = false;
-        JSONParser parser = JSON.createParser(searchResults);
-        while(parser.nextToken() != null) {
-            if(parser.getCurrentToken() == JSONToken.FIELD_NAME) {
-                if(parser.getText() == 'title') {
-                    parser.nextToken();
-                    isNameFound = parser.getText().equalsIgnoreCase('How to Change Billing and Shipping Info');
-                }
-            }
-        }
-        System.assert(isNameFound);
-    }
-    
     public static testMethod void testCalculateChatIntent() {
         
         ContentVersion cv = new ContentVersion();
@@ -95,7 +63,7 @@ private class PCKnowledgeUtilityControllerTests {
         Test.setMock(HttpCalloutMock.class, new SalesforceHttpCalloutMock());
         string chat = 'can you help with my billing';
         Test.startTest();
-        List<Object> listOfIntents = PCKnowledgeUtilityController.calculateChatIntent(chat); 
+        List<Object> listOfIntents = PureCloudKnowledgeUtilityController.calculateChatIntent(chat); 
         Test.stopTest();
         System.assert(listOfIntents.size() == 2);
     }
@@ -106,7 +74,7 @@ private class PCKnowledgeUtilityControllerTests {
             Test.setMock(HttpCalloutMock.class, new SalesforceHttpCalloutMock());
             string chat = 'can you help with my billing';
             Test.startTest();
-            List<Object> listOfIntents = PCKnowledgeUtilityController.calculateChatIntent(chat); 
+            List<Object> listOfIntents = PureCloudKnowledgeUtilityController.calculateChatIntent(chat); 
             Test.stopTest();
             System.assert(false);
         } catch(Exception e) {
@@ -127,7 +95,7 @@ private class PCKnowledgeUtilityControllerTests {
             Test.setMock(HttpCalloutMock.class, new FailedHttpCalloutMock());
             string chat = 'can you help with my billing';
             Test.startTest();
-            List<Object> listOfIntents = PCKnowledgeUtilityController.calculateChatIntent(chat); 
+            List<Object> listOfIntents = PureCloudKnowledgeUtilityController.calculateChatIntent(chat); 
             Test.stopTest();
             System.assert(false);
         } catch(Exception e) {

@@ -1,4 +1,4 @@
-public class JWT {
+public class PureCloudJWT {
 // Source: Modified from https://github.com/salesforceidentity/jwt
     
     public String alg {get;set;}
@@ -18,7 +18,7 @@ public class JWT {
     public static final String NONE = 'none';
 
     
-    public JWT(String alg) {
+    public PureCloudJWT(String alg) {
         this.alg = alg;
         this.validFor = 86400;
     }

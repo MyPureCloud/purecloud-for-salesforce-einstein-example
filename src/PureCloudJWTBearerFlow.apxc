@@ -1,7 +1,7 @@
-public class JWTBearerFlow {
+public class PureCloudJWTBearerFlow {
 // Source: Modified from https://github.com/salesforceidentity/jwt
 
-    public static String getAccessToken(String tokenEndpoint, JWT jwt) {
+    public static String getAccessToken(String tokenEndpoint, PureCloudJWT jwt) {
     
         String access_token = null;
         String body = 'grant_type=urn%3Aietf%3Aparams%3Aoauth%3Agrant-type%3Ajwt-bearer&assertion=' + jwt.issue() + '&scope=offline';
@@ -26,7 +26,7 @@ public class JWTBearerFlow {
             }
             
         } else {
-            throw new CustomException('JWT Exception: ' + res.getBody());
+            throw new PureCloudCustomException('JWT Exception: ' + res.getBody());
         }
         
         return access_token;
