@@ -1,4 +1,4 @@
-public with sharing class PCKnowledgeUtilityController {
+public with sharing class PureCloudKnowledgeUtilityController {
 
     @AuraEnabled
     public static String getCallCenterUrl() {
@@ -66,12 +66,12 @@ public with sharing class PCKnowledgeUtilityController {
         try {
             String intentEndpoint = 'https://api.einstein.ai/v2/language/intent';
             String accessToken;
-            String sentimentModel = KnowledgeConstants.MODEL_ID; 
+            String sentimentModel = PureCloudKnowledgeConstants.MODEL_ID; 
       
-            if(String.isBlank(KnowledgeConstants.ACCESS_TOKEN)) {
+            if(String.isBlank(PureCloudKnowledgeConstants.ACCESS_TOKEN)) {
                 accessToken = getToken();
             } else {
-                accessToken = KnowledgeConstants.ACCESS_TOKEN;
+                accessToken = PureCloudKnowledgeConstants.ACCESS_TOKEN;
             }
                
             Http http = new Http();
@@ -86,7 +86,7 @@ public with sharing class PCKnowledgeUtilityController {
             HTTPResponse res = http.send(request);  
             Integer responseCode = res.getStatusCode();
             if(responseCode != 200) {
-                throw new CustomException(res.getBody());
+                throw new PureCloudCustomException(res.getBody());
             }
             
             JSONParser  parser = JSON.createParser(res.getBody());
@@ -118,15 +118,14 @@ public with sharing class PCKnowledgeUtilityController {
     private static String getToken() {
         String accessToken = '';
         String tokenEndpoint = 'https://api.einstein.ai/v2/oauth2/token';
-        String email = KnowledgeConstants.USER_EMAIL;
+        String email = PureCloudKnowledgeConstants.USER_EMAIL;
         ContentVersion base64Content;
         
         List<ContentVersion> base64Contents = [SELECT  Title, VersionData FROM    ContentVersion WHERE   Title = 'einstein_platform' ];
         System.debug(base64Contents);
         if(base64Contents.size() == 0) {
-            throw new CustomException('Private Key File einstein_platform.pem is not found');
+            throw new PureCloudCustomException('Private Key File einstein_platform.pem is not found');
         }
-        
         base64Content = base64Contents[0];
         DateTime tokenExpireTime = DateTime.now().addMinutes(30);
         String tokenExpireTimeinUnixFormate = ''+tokenExpireTime.getTime()/1000;
@@ -136,14 +135,14 @@ public with sharing class PCKnowledgeUtilityController {
         keyContents = keyContents.replace('-----END RSA PRIVATE KEY-----', '');
         keyContents = keyContents.replace('\n', '');
         
-        JWT jwt = new JWT('RS256');
+        PureCloudJWT jwt = new PureCloudJWT('RS256');
         jwt.pkcs8 = keyContents;
         jwt.iss = 'developer.force.com';
         jwt.sub = email;
         jwt.aud = tokenEndpoint;
         jwt.exp = tokenExpireTimeinUnixFormate;
 
-        accessToken = JWTBearerFlow.getAccessToken(tokenEndpoint, jwt);        
+        accessToken = PureCloudJWTBearerFlow.getAccessToken(tokenEndpoint, jwt);  
         return accessToken;
     }
     

@@ -29,7 +29,6 @@
     getChatProbabilities : function (component, searchValue) {
     	var action = component.get("c.calculateChatIntent");
         action.setParams({'chat' : searchValue.messages[searchValue.messages.length - 1].body}); 
-        
         action.setCallback(this, function(response) {
             var state = response.getState();
             

@@ -1,4 +1,4 @@
-<aura:component controller="PCKnowledgeUtilityController" implements="flexipage:availableForAllPageTypes" access="global">
+<aura:component controller="PureCloudKnowledgeUtilityController" implements="flexipage:availableForAllPageTypes" access="global">
     <lightning:workspaceAPI aura:id="workspace"/>
     <aura:attribute name="knowledgeArticles" type="List"></aura:attribute>
     <aura:attribute name="numResults" type="Integer" default="0"></aura:attribute>

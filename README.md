@@ -20,7 +20,7 @@ This repository contains a Salesforce Lightning component, Apex classes, and sup
 
 1. Set up Salesforce Knowledge and train your data for Salesforce Einstein.
 2. Configure the PureCloud for Salesforce managed package to enable client events with an event type of Notification and expand chat notifications.
-3. Install the unmanaged package, add a Lightning component to an app, and add values to the KnowledgeConstants Apex class.
+3. Install the unmanaged package, add a Lightning component to an app, and add values to the PureCloudKnowledgeConstants Apex class.
 4. Send an ACD chat message to an active user in PureCloud for Salesforce and confirm that the Lightning component updates with articles.
 
 
@@ -38,6 +38,9 @@ Install the unmanaged package.
 ## Configuration
 
 ### Set Up Salesforce Knowledge
+
+**Note:** If your knowledge article object is named something other than the default "Knowledge__kav", you will not see any search results. You can edit the searchKnowledge method in PureCloudKnowledgeUtilityController.apxc to query for your Knowledge object by replacing every instance of "Knowledge_kav" with your object name. 
+
 1. [Enable Salesforce Knowledge](https://developer.salesforce.com/docs/atlas.en-us.knowledge_dev.meta/knowledge_dev/knowledge_development_setup_enable.htm).
 2. Import Salesforce Knowledge articles from the [simple-sample-knowledge-articles.csv](resources/knowledge%20articles/simple-sample-knowledge-articles.csv) file.
 
@@ -88,15 +91,15 @@ These steps use the example dataset in the [einstein-example-dataset copy.csv](r
 
 
 ### Install the Unmanaged Package
-1. In your Salesforce organization, install the unmanaged package.
+1. In your Salesforce organization, install the [unmanaged package](https://login.salesforce.com/packaging/installPackage.apexp?p0=04t3i000000RQXB).
 2. Add a **[Remote Site Setting](https://help.salesforce.com/articleView?id=configuring_remoteproxy.htm&type=5)**. Set **Remote Site URL** to `https://api.einstein.ai`.
 3. (Optional) To dynamically create access tokens, use [Salesforce Files](https://help.salesforce.com/articleView?id=collab_salesforce_files_parent.htm&type=5) to upload the **einstein_platform.pem** file. You downloaded this file when you signed up for Salesforce Einstein.
   1. Add the **Files** object as a [navigation item](https://help.salesforce.com/articleView?id=customize_lex_nav_menus_create.htm&type=0) to a Lighting app.
   2. Open a Lightning app and click **Files** in the top toolbar. Then click **Upload Files**.
-4. Add values to the **KnowledgeConstants** Apex class.
+4. Add values to the **PureCloudKnowledgeConstants** Apex class.
 
 	  At a minimum, add **USER_EMAIL** and **MODEL_ID**. If you did not upload the **einstein_platform.pem** file in step 3, then also add **ACCESS_TOKEN**. The unmanaged package uses this access token.
-5. Add the **PCKnowledgeUtility** Lightning component as a [utility item](https://help.salesforce.com/articleView?id=dev_apps_lightning_utilities.htm&type=0) to a Lightning app. This Lightning app must have an Open CTI Softphone.
+5. Add the **PureCloudKnowledgeUtility** Lightning component as a [utility item](https://help.salesforce.com/articleView?id=dev_apps_lightning_utilities.htm&type=0) to a Lightning app. This Lightning app must have an Open CTI Softphone.
 
   **Note**: Be sure to select **Start automatically**.
 

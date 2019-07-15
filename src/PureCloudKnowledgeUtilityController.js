@@ -10,7 +10,7 @@
                 clientOrigin = returnedUrl.match(/^(http(s?):\/\/[^\/]+)/gi)[0];
                 
                 window.addEventListener("message", $A.getCallback(function(event) {
-                    
+
                     //Check for origin and reject message if no match
                     if(event.origin !== clientOrigin) {
                         return;
