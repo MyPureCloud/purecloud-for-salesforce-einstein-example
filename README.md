@@ -64,7 +64,7 @@ These steps use the example dataset in the [einstein-example-dataset copy.csv](r
 1. Generate an OAuth token to use in the API calls.
    a. Go to [Generate an OAuth token](https://api.einstein.ai/token).
    b. Enter your credentials for Einstein and the key from the **einstein_platform.pem** file.
-2. Create the dataset using the **sample-knowledge-articles-dataset.csv** file.
+2. Create the dataset using the **einstein-example-dataset copy.csv** file.
    ```
 	 curl -X POST -H "Authorization: Bearer  <TOKEN>" -H "Cache-Control: no-cache" -H "Content-Type: multipart/form-data" -F "type=text-intent" -F "name=<DATASET_NAME>" -F "data=@<FILE_LOCATION>" https://api.einstein.ai/v2/language/datasets/upload
 	 ```
