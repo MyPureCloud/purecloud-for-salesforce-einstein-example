@@ -2,7 +2,8 @@
     <lightning:workspaceAPI aura:id="workspace"/>
     <aura:attribute name="knowledgeArticles" type="List"></aura:attribute>
     <aura:attribute name="numResults" type="Integer" default="0"></aura:attribute>
-    <aura:handler name="init" value="{!this}" action="{!c.initComponent}"/>
+    <!-- Uncomment the line below to use the lightning message channel for PureCloud for Salesforce client events -->
+    <!--<lightning:messageChannel type="purecloud__ClientEvent__c" aura:id="clientEventMessageChannel" onMessage="{!c.onClientEvent}" scope="APPLICATION"/>-->
     
     <div>
         <div>
