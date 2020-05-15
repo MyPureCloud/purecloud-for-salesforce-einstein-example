@@ -3,6 +3,13 @@
 
 This repository contains a Salesforce Lightning component, Apex classes, and supporting files for use with PureCloud for Salesforce. These items show how Salesforce Einstein can display Salesforce Knowledge articles based on ACD chat messages in PureCloud for Salesforce.
 
+:warning: **Warning**: The Lightning component code contained in this repository depends on Lightning Message Service (LMS), which is currently a beta feature in Salesforce. The Lightning component code will not work in the Lightning Experience example until the following occurs:
+ 
+* Salesforce announces the general availability of LMS.
+* Genesys updates and releases the PureCloud for Salesforce managed package with LMS support.
+ 
+Until then, use the [post message example branch](https://github.com/MyPureCloud/purecloud-for-salesforce-einstein-example/tree/post-message-example) for a working example.
+
 
 # Table of Contents
 
@@ -27,14 +34,15 @@ This repository contains a Salesforce Lightning component, Apex classes, and sup
 
 ## Prerequisites
 
-* Version 2.49 or later of the [PureCloud for Salesforce](https://appexchange.salesforce.com/appxListingDetail?listingId=a0N30000000pvMdEAI) managed package installed in your Salesforce organization.
+* PureCloud for Salesforce installed in your Salesforce organization.
+  For more information, see [Set up the PureCloud for Salesforce integration](https://help.mypurecloud.com/?p=39326).
+  * Version of the [PureCloud for Salesforce](https://appexchange.salesforce.com/appxListingDetail?listingId=a0N30000000pvMdEAI) managed package that supports Lightning Message Service.
 * ACD chat working in your PureCloud organization.
 
 
 ## Installation
 
-Install the [unmanaged package](https://login.salesforce.com/packaging/installPackage.apexp?p0=04t3i000000RQXB).
-
+Install the [unmanaged package](https://login.salesforce.com/packaging/installPackage.apexp?p0=04t3i000000RQru).
 
 ## Configuration
 

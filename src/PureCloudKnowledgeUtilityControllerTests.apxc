@@ -1,56 +1,11 @@
 @isTest
 private class PureCloudKnowledgeUtilityControllerTests {
-
-    public static testMethod void testgetCallCenterURL() {
-        
-        CallCenter cc = [Select Id, AdapterUrl From CallCenter Where InternalName = 'PureCloudForSalesforceLightning' Limit 1];
-        Profile p = [SELECT Id FROM Profile WHERE Name='Standard User'];
-        
-        User userObj = new User();
-        userObj.Email = 'unit.test@pccrmwebclient.com';
-        userObj.Username = 'unit.test@pccrmwebclient.com';
-        userObj.CallCenterId = cc.Id;
-        userObj.LastName = 'Unit';
-        userObj.Alias = 'unit';
-        userObj.TimeZoneSidKey = 'America/Los_Angeles';
-        userObj.LocaleSidKey = 'en_US';
-        userObj.EmailEncodingKey = 'UTF-8';
-        userObj.ProfileId = p.Id;
-        userObj.LanguageLocaleKey = 'en_US';
-        insert userObj;
-        
-        System.runAs(userObj) {
-            String returnedURL = PureCloudKnowledgeUtilityController.getCallCenterUrl();
-            System.assertEquals(returnedUrl, cc.AdapterUrl);
-        }
-    }
     
-    public static testMethod void testGetCallCenterURLFails() {
-        
-        Profile p = [SELECT Id FROM Profile WHERE Name='Standard User'];
-
-        User userObj = new User();
-        userObj.Email = 'unit.test@pccrmwebclient.com';
-        userObj.Username = 'unit.test@pccrmwebclient.com';
-        userObj.LastName = 'Unit';
-        userObj.Alias = 'unit';
-        userObj.TimeZoneSidKey = 'America/Los_Angeles';
-        userObj.LocaleSidKey = 'en_US';
-        userObj.EmailEncodingKey = 'UTF-8';
-        userObj.ProfileId = p.Id;
-        userObj.LanguageLocaleKey = 'en_US';
-        insert userObj;
-        
-        System.runAs(userObj) {
-            try {
-                String returnedURL = PureCloudKnowledgeUtilityController.getCallCenterUrl();
-                System.assert(false);
-            } catch(exception e) {
-               System.assert(true); 
-            }
-        }
+    public static testMethod void testSearchKnowledge() {
+		String jsonString = PureCloudKnowledgeUtilityController.searchKnowledge('hello');
+        System.assert(String.isNotBlank(jsonString));
     }
-        
+
     public static testMethod void testCalculateChatIntent() {
         
         ContentVersion cv = new ContentVersion();

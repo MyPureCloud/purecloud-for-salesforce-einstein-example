@@ -1,40 +1,5 @@
 ({
-    initComponent : function(component, event, helper) {
-        var clientOrigin;
-        var action = component.get("c.getCallCenterUrl");
-        
-        action.setCallback(this, function(response) {
-            var state = response.getState();
-            if(state === "SUCCESS") {
-                var returnedUrl = response.getReturnValue();
-                clientOrigin = returnedUrl.match(/^(http(s?):\/\/[^\/]+)/gi)[0];
-                
-                window.addEventListener("message", $A.getCallback(function(event) {
-
-                    //Check for origin and reject message if no match
-                    if(event.origin !== clientOrigin) {
-                        return;
-                    }
-        
-                    if (event.data && event.data.type === 'Notification' && event.data.category === 'chatUpdate') {
-                        helper.getChatProbabilities(component, event.data.data);
-                    }
-                }), false);
-            } else {
-                var errors = response.getError();
-                if (errors) {
-                    if (errors[0] && errors[0].message) {
-                        console.error("Error message: " + errors[0].message);
-                    }
-                } else {
-                    console.error("Unknown error");
-                }
-            }
-        });
-
-        $A.enqueueAction(action);
-    },
-        openArticle: function (component, event, helper) {
+    openArticle: function (component, event, helper) {
         var id = event.target.id;
         var articles = component.get('v.knowledgeArticles');
         var article = articles.filter(function (a) { return a.id == id; })[0];
@@ -52,5 +17,11 @@
         }).catch(function(error) {
             console.error(error);
         });
+    },
+    onClientEvent: function (component, message, helper) {
+        var eventData = message.getParams();
+        if (eventData && eventData.type === 'Notification' && eventData.category === 'chatUpdate') {
+            helper.getChatProbabilities(component, eventData.data);
+        }
     }
 })
