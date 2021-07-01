@@ -144,5 +144,42 @@ public with sharing class PureCloudKnowledgeUtilityController {
                 }
             }
         }
-    } 
+    }
+
+    //Call the Genesys Cloud Platform API to retrieve the full conversation details in search of a participant attribute
+    //with the key Call_Reason...used to preload the knowledge suggestions out of an Architect flow
+    @auraEnabled
+    public static String getAttributes(String conversationId) {
+        System.debug('/platform/api/v2/conversations/' + conversationId);
+        HTTPResponse response = purecloud.SDK.Rest.get('/platform/api/v2/conversations/' + conversationId);
+        JSONParser parser = JSON.createParser(response.getBody());
+        String intent = 'no intent';
+        Boolean gotData = false;
+        while(parser.nextToken() != null && !gotData) {
+            String text = parser.getText();
+            if(text == 'Call_Reason') {
+                System.debug('got here');
+                parser.nextToken();
+                intent = parser.getText();
+                gotData = true;
+            }
+        }
+        return intent;
+    }
+    
+    //Call the Genesys Cloud Notifications API to create a new channel
+    @auraEnabled
+    public static String getWssUri() {
+        HTTPResponse response = purecloud.SDK.Rest.post('/platform/api/v2/notifications/channels', '{}');
+        String body = response.getBody();
+        System.debug('wss response: ' + body);
+        return body;
+    }
+    
+    //Call the Genesys Cloud Notifications API to subscribe to a topic
+    @auraEnabled
+    public static void subscribeToTopic(String channelId, String topic) {
+        HTTPResponse response = purecloud.SDK.Rest.put('/platform/api/v2/notifications/channels/' + channelId + '/subscriptions', '[{"id": "' + topic + '"}]');
+        System.debug('subscription response: ' + response.getBody());
+    }
 }

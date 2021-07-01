@@ -23,5 +23,14 @@
         if (eventData && eventData.type === 'Notification' && eventData.category === 'chatUpdate') {
             helper.getChatProbabilities(component, eventData.data);
         }
+
+        //Act on Interaction events when a new interaction is added that is not a chat
+        if (eventData && eventData.type === 'Interaction' && eventData.category === 'add' && eventData.data.isChat != true) {
+            //Look for a participant attribute with the key "Call_Reason" and, if present, preload the knowledge suggestions
+            helper.getCallReason(component, eventData.data.id);
+            
+            //Create a websocket for transcript notifications and pipe the data into the knowledge suggestion process
+            helper.transcriptionNotifications(component, eventData.data.id);
+        }
     }
 })
