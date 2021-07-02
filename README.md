@@ -1,5 +1,5 @@
 
-# PureCloud for Salesforce Einstein Example
+# Genesys Cloud for Salesforce Einstein Example
 
 This repository contains a Salesforce Lightning component, Apex classes, and supporting files for use with Genesys Cloud for Salesforce. These items show how Salesforce Einstein can display Salesforce Knowledge articles based on ACD chat messages and voice transcripts from Genesys Cloud for Salesforce.
 
@@ -19,14 +19,15 @@ This repository contains a Salesforce Lightning component, Apex classes, and sup
 ## TL;DR
 
 1. Set up Salesforce Knowledge and train your data for Salesforce Einstein.
-2. Configure the PureCloud for Salesforce managed package to enable client events with an event type of Notification and expand chat notifications.
-3. Install the unmanaged package, add a Lightning component to an app, and add values to the PureCloudKnowledgeConstants Apex class.
-4. Send an ACD chat message to an active user in Genesys Cloud for Salesforce and confirm that the Lightning component updates with articles.
+2. Add wss://streaming.mypurecloud.com to the list of allowed domains in the Salesforce CSP Trusted Sites settings.
+3. Configure the Genesys Cloud for Salesforce managed package to enable client events with an event type of Notification and expand chat notifications.
+4. Install the unmanaged package, add a Lightning component to an app, and add values to the PureCloudKnowledgeConstants Apex class.
+5. Send an ACD chat message or place a call to an active user in Genesys Cloud for Salesforce and confirm that the Lightning component updates with articles.
 
 
 ## Prerequisites
 
-* PureCloud for Salesforce installed in your Salesforce organization.
+* Genesys Cloud for Salesforce installed in your Salesforce organization.
   For more information, see [Set up the Genesys Cloud for Salesforce integration](https://help.mypurecloud.com/?p=39326).
   * Version of the [Genesys Cloud for Salesforce](https://appexchange.salesforce.com/appxListingDetail?listingId=a0N30000000pvMdEAI) managed package that supports Lightning Message Service.
 * ACD chat working in your Genesys Cloud organization.
@@ -82,6 +83,12 @@ These steps use the example dataset in the [einstein-example-dataset copy.csv](r
 	 ```
 	 The training is complete when status is SUCCEEDED and progress is 1.
 
+### Add Genesys Cloud websocket domain to list of CSP Trusted Sites in Salesforce
+
+1. In your Salesforce organization, search for CSP in the administrative portal using the quick find tool.
+2. Open CSP Trusted Sites and add a New Trusted Site.
+3. Give the trusted site a name, put wss://streaming.{environment} in the Trusted Site URL field and flag it to allow site for connect-src (Replace environment with the proper environment domain settings for your Genesys Cloud org, i.e. mypurecloud.com for US-East, usw2.pure.cloud for US-West).
+4. Click **Save.**
 
 ### Configure the Genesys Cloud for Salesforce Managed Package
 
