@@ -28,7 +28,10 @@
     
     getChatProbabilities : function (component, searchValue) {
     	var action = component.get("c.calculateChatIntent");
-        action.setParams({'chat' : searchValue.messages[searchValue.messages.length - 1].body}); 
+        if (searchValue.messages)
+	        action.setParams({'chat' : searchValue.messages[searchValue.messages.length - 1].body});
+        else
+            action.setParams({'chat' : searchValue});
         action.setCallback(this, function(response) {
             var state = response.getState();
             
@@ -71,6 +74,42 @@
             else {
 				this.handleResponseError("Error getting intent: ", response);
             }
+        });
+        $A.enqueueAction(action);
+    },
+
+    //Get the conversation details
+    getConversation : function (component, conversationId, messageId) {
+        var action = component.get("c.getConversation");
+        action.setParams({'conversationId': conversationId});
+        action.setCallback(this, function(response) {
+            var state = response.getState();
+            if(state === "SUCCESS") {
+                this.getMessage(component, response.getReturnValue());
+            }
+            else {
+                this.handleResponseError("Error getting conversation details: ", response);
+            }
+        });
+        $A.enqueueAction(action);
+    },
+
+    //Get the text body from the most recent customer message
+    getMessage: function (component, conversationDetails) {
+        var action = component.get("c.getMessage");
+        var conversation = JSON.parse(conversationDetails);
+        var messageCount = conversation.participants[0].messages[0].messages.length;
+        var Uri = conversation.participants[0].messages[0].messages[messageCount-1].messageURI;
+        console.log('messageURI: ', Uri);
+        action.setParams({'Uri': Uri});
+        action.setCallback(this, function(response) {
+            var state = response.getState();
+            if (state === "SUCCESS") {
+                var message = JSON.parse(response.getReturnValue());
+                this.getChatProbabilities(component, message.textBody);
+            }
+            else
+                this.handleResponseError("Error getting message body: ", response);
         });
         $A.enqueueAction(action);
     },
