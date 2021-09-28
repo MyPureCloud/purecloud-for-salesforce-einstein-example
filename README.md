@@ -112,6 +112,17 @@ These steps use the example dataset in the [einstein-example-dataset copy.csv](r
 5. Add the **PureCloudKnowledgeUtility** Lightning component as a [utility item](https://help.salesforce.com/articleView?id=dev_apps_lightning_utilities.htm&type=0) to a Lightning app. This Lightning app must have an Open CTI Softphone.<br />
    **Note**: Be sure to select **Start automatically**.
 
+### Update the PureCloudKnowledgeUtility bundle for Lightning Deployments
+
+If you're running Salesforce Lightning then run through the following steps:
+
+1. In your Salesforce organization, search for Installed Packages in the administrative portal using the quick find tool.
+2. Open the unmanaged package for the knowledge utility
+3. Click "View Components"
+4. Open the Aura Component Bundle item (e.g. "PureCloudKnowledgeUtility")
+5. Click the "Developer Console" button
+6. Uncomment the line according to the instructions in the code (i.e. remove the <!-- and --> from the beginning and end of the line, respectively)
+7. Click File / Save
 
 ## Usage
 
