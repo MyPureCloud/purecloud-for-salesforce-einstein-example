@@ -61,7 +61,7 @@ Install the [unmanaged package](https://login.salesforce.com/packaging/installPa
 
 ### Train Salesforce Einstein
 
-These steps use the example dataset in the [einstein-example-dataset copy.csv](resources/einstein-example-dataset.csv) file. The following API calls and information come from the  [Salesforce Einstein documentation](https://metamind.readme.io/docs/create-a-lang-dataset-from-file).
+These steps use the example dataset in the [einstein-example-dataset.csv](resources/einstein-example-dataset.csv) file. The following API calls and information come from the  [Salesforce Einstein documentation](https://metamind.readme.io/docs/create-a-lang-dataset-from-file).
 1. Generate an OAuth token to use in the API calls.
    a. Go to [Generate an OAuth token](https://api.einstein.ai/token).
    b. Enter your credentials for Einstein and the key from the **einstein_platform.pem** file.
