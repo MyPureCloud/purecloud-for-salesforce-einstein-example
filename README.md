@@ -86,8 +86,8 @@ These steps use the example dataset in the [einstein-example-dataset copy.csv](r
 ### Configure the Genesys Cloud for Salesforce Managed Package
 
 1. In your Salesforce organization, click **Configure** next to the Genesys Cloud for Salesforce managed package.
-2. Under **Choose a Call Center**, select the **Genesys Cloud for Salesforce Lightning** Client Event Message Type.
-3. Under **Client Event Settings**, choose the **Lightning Message Channel**.
+2. Under **Choose a Call Center**, select the **Genesys Cloud for Salesforce Lightning** .
+3. Under **Client Event Settings**, choose the **Lightning Message Channel** Client Event Message Type.
 4. Under **Client Event Types**, select **Notification**. Click the right arrow to add it under **Chosen**.
 5. Select **Expand Chat Notifications**.
 6. Click **Save.**
