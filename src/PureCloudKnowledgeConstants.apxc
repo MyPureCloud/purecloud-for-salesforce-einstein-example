@@ -2,6 +2,6 @@ public class PureCloudKnowledgeConstants {
     
     public static final String USER_EMAIL = '';
     public static final String MODEL_ID = '';
-    public static final String ACCESS_TOKEN = ''; // optional
+    public static final String ACCESS_TOKEN = ''; // optional. If left out upload your private key using Salesforce Files (https://help.salesforce.com/s/articleView?id=sf.collab_salesforce_files_parent.htm&type=5)
     
 }
