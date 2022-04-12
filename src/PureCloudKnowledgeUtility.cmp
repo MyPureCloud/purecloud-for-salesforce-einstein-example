@@ -1,20 +1,19 @@
-<aura:component controller="PureCloudKnowledgeUtilityController" implements="flexipage:availableForAllPageTypes" access="global">
+<aura:component controller="PureCloudKnowledgeUtilityController" implements="force:hasRecordId,flexipage:availableForAllPageTypes" access="global">
     <lightning:workspaceAPI aura:id="workspace"/>
-    <aura:attribute name="knowledgeArticles" type="List"></aura:attribute>
-    <aura:attribute name="numResults" type="Integer" default="0"></aura:attribute>
     <lightning:messageChannel type="purecloud__ClientEvent__c" aura:id="clientEventMessageChannel" onMessage="{!c.onClientEvent}" scope="APPLICATION"/>
-    
+    <aura:attribute name="knowledgeArticles" type="List"/>
+    <aura:attribute name="numResults" type="Integer" default="0"/>
+    <aura:registerEvent name="refreshEvent" type="markup://lightning:nextBestActionsRefresh" />
     <div>
-        <div>
+        <div class="forceRelatedListCardHeader slds-grid slds-page-header">
             <h1>Suggested Knowledge Articles</h1>
-        	<span class="result-count">{! v.numResults } Results <span class="dot slds-p-horizontal_xx-small">•</span>Sorted by Confidence</span>
         </div>
         <aura:iteration items="{! v.knowledgeArticles }" var="article" indexVar="rowIndex">
-            <div>
+            <div class="result-list">
                 <div><button class="article-link-button" type="button" onclick="{!c.openArticle}" id="{!article.id}">{!article.title}</button></div>
-                <div class="article-number">{!article.articleNumber} - (Confidence:  <lightning:formattedNumber value="{!article.probability}" style ="percent" maximumFractionDigits = "2"/>)</div>
+                <div class="article-number">{!article.articleNumber} - (Confidence:  <lightning:formattedNumber value="{!article.probability}" style ="percent" maximumFractionDigits = "0"/>)</div>
             </div>
             <hr/>
         </aura:iteration>
-    </div>
+	</div>
 </aura:component>

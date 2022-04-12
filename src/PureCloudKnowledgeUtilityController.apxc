@@ -198,4 +198,18 @@ public with sharing class PureCloudKnowledgeUtilityController {
         HTTPResponse response = purecloud.SDK.Rest.put('/platform/api/v2/notifications/channels/' + channelId + '/subscriptions', '[{"id": "' + topic + '"}]');
         System.debug('subscription response: ' + response.getBody());
     }
+    
+    //Find object and update Last_utterance__c with interaction utterance
+    @auraEnabled
+    public static void updateLastUtterance(String recordId, String utterance){
+        Case caseToUpdate;
+        try {
+            caseToUpdate = [SELECT Last_utterance__c FROM Case WHERE Id = :recordId];
+            caseToUpdate.Last_utterance__c = utterance;
+            update caseToUpdate;
+        }
+        catch (DmlException e) {
+            System.debug('updateLastUtterance error: ' + e.getMessage());
+        }
+    }
 }

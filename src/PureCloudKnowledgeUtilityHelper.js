@@ -69,6 +69,15 @@
             var state = response.getState();
             if(state === "SUCCESS") {
 	            console.log('intent: ', response.getReturnValue());
+                var updateAction = component.get("c.updateLastUtterance");
+                updateAction.setParams({'recordId': component.get("v.recordId"), 'utterance': response.getReturnValue()});
+                updateAction.setCallback(this, function(response) {
+                	var appEvt = $A.get("e.lightning:nextBestActionsRefresh");
+                    appEvt.setParam("recordId", component.get("v.recordId"));
+                    appEvt.fire();
+                });
+                $A.enqueueAction(updateAction);
+
                 this.getChatProbabilities(component, response.getReturnValue());
             }
             else {
@@ -99,6 +108,8 @@
         var action = component.get("c.getMessage");
         var conversation = JSON.parse(conversationDetails);
         var messageCount = conversation.participants[0].messages[0].messages.length;
+        if (messageCount <= 0)
+            return;
         var Uri = conversation.participants[0].messages[0].messages[messageCount-1].messageURI;
         console.log('messageURI: ', Uri);
         action.setParams({'Uri': Uri});
@@ -106,6 +117,14 @@
             var state = response.getState();
             if (state === "SUCCESS") {
                 var message = JSON.parse(response.getReturnValue());
+                var updateAction = component.get("c.updateLastUtterance");
+                updateAction.setParams({'recordId': component.get("v.recordId"), 'utterance': message.textBody});
+                updateAction.setCallback(this, function(response) {
+                	var appEvt = $A.get("e.lightning:nextBestActionsRefresh");
+                    appEvt.setParam("recordId", component.get("v.recordId"));
+                    appEvt.fire();
+                });
+                $A.enqueueAction(updateAction);
                 this.getChatProbabilities(component, message.textBody);
             }
             else
@@ -133,9 +152,18 @@
                 if (messageData.topicName != 'channel.metadata' && messageData.eventBody.transcripts) {
                     for (var x=0; x<messageData.eventBody.transcripts.length; x++) {
                         if (messageData.eventBody.transcripts[x].channel == "EXTERNAL") {
+                            var updateAction = component.get("c.updateLastUtterance");
+                            updateAction.setParams({'recordId': component.get("v.recordId"), 'utterance': messageData.eventBody.transcripts[x].alternatives[0].transcript});
+                            updateAction.setCallback(this, function(response) {
+                                var appEvt = $A.get("e.lightning:nextBestActionsRefresh");
+                                appEvt.setParam("recordId", component.get("v.recordId"));
+                                appEvt.fire();
+                            });
+                            $A.enqueueAction(updateAction);
+                            
                             var lastAction = component.get("c.calculateChatIntent");
                             var searchValue = messageData.eventBody.transcripts[x].alternatives[0].transcript;
-                            lastAction.setParams({'chat' : searchValue}); 
+                            lastAction.setParams({'chat' : searchValue});
                             lastAction.setCallback(this, function(response) {
                                 var state = response.getState();
                                 if(state === "SUCCESS") {

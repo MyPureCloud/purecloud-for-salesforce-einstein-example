@@ -1,6 +1,6 @@
 .THIS {
     background: #fff;
-    padding: 13px;
+    border-radius: 0.25rem;
 }
 .THIS h1 {
     font-weight: bold;
@@ -27,4 +27,8 @@
 }
 .THIS hr {
 	margin: 0.5rem 0;
+}
+.THIS .result-list {
+    padding-left: 13px;
+    padding-right: 13px;
 }

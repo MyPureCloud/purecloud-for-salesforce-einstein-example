@@ -1,7 +1,7 @@
 
 # Genesys Cloud for Salesforce Einstein Example
 
-This repository contains a Salesforce Lightning component, Apex classes, and supporting files for use with Genesys Cloud for Salesforce. These items show how Salesforce Einstein can display Salesforce Knowledge articles based on ACD chat messages and voice transcripts from Genesys Cloud for Salesforce.
+This repository contains a Salesforce Lightning component, Apex classes, and supporting files for use with Genesys Cloud for Salesforce. These items show how Salesforce Einstein can display Salesforce Knowledge articles based on ACD chat messages, digital messaging, and voice transcripts from Genesys Cloud for Salesforce.
 
 # Table of Contents
 
@@ -20,9 +20,9 @@ This repository contains a Salesforce Lightning component, Apex classes, and sup
 
 1. Set up Salesforce Knowledge and train your data for Salesforce Einstein.
 2. Add wss://streaming.mypurecloud.com to the list of allowed domains in the Salesforce CSP Trusted Sites settings.
-3. Configure the Genesys Cloud for Salesforce managed package to enable client events with an event type of Notification and expand chat notifications.
+3. Configure the Genesys Cloud for Salesforce managed package to enable client events with event types of Interaction and Notification. Enable expand chat notifications.
 4. Install the unmanaged package, add a Lightning component to an app, and add values to the PureCloudKnowledgeConstants Apex class.
-5. Send an ACD chat message or place a call to an active user in Genesys Cloud for Salesforce and confirm that the Lightning component updates with articles.
+5. Send an ACD chat message, digital message, or place a call to a queue with transcription enabled in Genesys Cloud for Salesforce and confirm that the Lightning component updates with articles.
 
 
 ## Prerequisites
@@ -30,7 +30,7 @@ This repository contains a Salesforce Lightning component, Apex classes, and sup
 * Genesys Cloud for Salesforce installed in your Salesforce organization.
   For more information, see [Set up the Genesys Cloud for Salesforce integration](https://help.mypurecloud.com/?p=39326).
   * Version of the [Genesys Cloud for Salesforce](https://appexchange.salesforce.com/appxListingDetail?listingId=a0N30000000pvMdEAI) managed package that supports Lightning Message Service.
-* ACD chat working in your Genesys Cloud organization.
+* ACD chat, digital messaging, or transcription-enabled voice queues in your Genesys Cloud organization.
 
 
 ## Installation
@@ -95,7 +95,7 @@ These steps use the example dataset in the [einstein-example-dataset copy.csv](r
 1. In your Salesforce organization, click **Configure** next to the Genesys Cloud for Salesforce managed package.
 2. Under **Choose a Call Center**, select **Genesys Cloud for Salesforce Lightning**.
 3. Select **Enable Client Events**.
-4. Under **Client Event Types**, select **Notification**. Click the right arrow to add it under **Chosen**.
+4. Under **Client Event Types**, select **Interaction** and **Notification**. Click the right arrow to add it under **Chosen**.
 5. Select **Expand Chat Notifications**.
 6. Click **Save.**
 
@@ -115,8 +115,8 @@ These steps use the example dataset in the [einstein-example-dataset copy.csv](r
 
 ## Usage
 
-1. Send an ACD chat message or make a call to an active user in Genesys Cloud for Salesforce.
-2. From the end user's chat window, type a message that corresponds with the dataset that was used to train Einstein.
+1. Send an ACD chat message, digital message, or make a call to a transcription-enabled voice queue in Genesys Cloud for Salesforce.
+2. As the customer, send or say a message that corresponds with the dataset that was used to train Einstein.
 3. Open the Lightning component. The Lightning component updates with articles related to the chat message.
 4. Click an article. Confirm that the article opens inside Salesforce.
 

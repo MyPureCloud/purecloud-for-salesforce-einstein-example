@@ -20,6 +20,7 @@
     },
     onClientEvent: function (component, message, helper) {
         var eventData = message.getParams();
+        
         if (eventData && eventData.type === 'Notification' && eventData.category === 'chatUpdate') {
             helper.getChatProbabilities(component, eventData.data);
         }
