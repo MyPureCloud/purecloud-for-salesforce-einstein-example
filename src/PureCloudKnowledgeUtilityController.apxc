@@ -40,7 +40,7 @@ public with sharing class PureCloudKnowledgeUtilityController {
     }
     
     @auraEnabled
-    public static List<Probabilities> calculateChatIntent(String chat) {
+    public static List<Probabilities> calculateIntent(String utterance) {
         List<Probabilities> probabilities = new List<Probabilities>();
         try {
             String intentEndpoint = 'https://api.einstein.ai/v2/language/intent';
@@ -60,7 +60,7 @@ public with sharing class PureCloudKnowledgeUtilityController {
             request.setHeader('Authorization', 'Bearer ' + accessToken);
             request.setHeader('Content-type', 'application/json');        
             
-            String body = '{\"modelId\":\"'+ sentimentModel + '\",\"document\":\"' + chat + '\"}';
+            String body = '{\"modelId\":\"'+ sentimentModel + '\",\"document\":\"' + utterance + '\"}';
             request.setBody(body);        
             HTTPResponse res = http.send(request);  
             Integer responseCode = res.getStatusCode();
@@ -146,59 +146,6 @@ public with sharing class PureCloudKnowledgeUtilityController {
         }
     }
 
-    //Call the Genesys Cloud Platform API to retrieve the full conversation details in search of a participant attribute
-    //with the key Call_Reason...used to preload the knowledge suggestions out of an Architect flow
-    @auraEnabled
-    public static String getAttributes(String conversationId) {
-        System.debug('/platform/api/v2/conversations/' + conversationId);
-        HTTPResponse response = purecloud.SDK.Rest.get('/platform/api/v2/conversations/' + conversationId);
-        JSONParser parser = JSON.createParser(response.getBody());
-        String intent = 'no intent';
-        Boolean gotData = false;
-        while(parser.nextToken() != null && !gotData) {
-            String text = parser.getText();
-            if(text == 'Call_Reason') {
-                System.debug('got here');
-                parser.nextToken();
-                intent = parser.getText();
-                gotData = true;
-            }
-        }
-        return intent;
-    }
-    
-    //Call the Genesys Cloud Platform API to retrieve the conversation details
-    @auraEnabled
-    public static String getConversation(String conversationId) {
-        System.debug('/platform/api/v2/conversations/' + conversationId);
-        HTTPResponse response = purecloud.SDK.Rest.get('/platform/api/v2/conversations/' + conversationId);
-        return response.getBody();
-    }
-    
-    //Call the Genesys Cloud Platform API to retrieve the conversation details
-    @auraEnabled
-    public static String getMessage(String Uri) {
-        System.debug(Uri);
-        HTTPResponse response = purecloud.SDK.Rest.get(Uri);
-        return response.getBody();
-    }
-    
-    //Call the Genesys Cloud Notifications API to create a new channel
-    @auraEnabled
-    public static String getWssUri() {
-        HTTPResponse response = purecloud.SDK.Rest.post('/platform/api/v2/notifications/channels', '{}');
-        String body = response.getBody();
-        System.debug('wss response: ' + body);
-        return body;
-    }
-    
-    //Call the Genesys Cloud Notifications API to subscribe to a topic
-    @auraEnabled
-    public static void subscribeToTopic(String channelId, String topic) {
-        HTTPResponse response = purecloud.SDK.Rest.put('/platform/api/v2/notifications/channels/' + channelId + '/subscriptions', '[{"id": "' + topic + '"}]');
-        System.debug('subscription response: ' + response.getBody());
-    }
-    
     //Find object and update Last_utterance__c with interaction utterance
     @auraEnabled
     public static void updateLastUtterance(String recordId, String utterance){

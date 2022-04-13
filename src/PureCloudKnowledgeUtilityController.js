@@ -21,21 +21,25 @@
     onClientEvent: function (component, message, helper) {
         var eventData = message.getParams();
         
-        if (eventData && eventData.type === 'Notification' && eventData.category === 'chatUpdate') {
-            helper.getChatProbabilities(component, eventData.data);
+        //subscribe to notification events on Lightning Message Channel
+        if (eventData && eventData.type === 'InitialSetup') {
+            component.find('clientEventMessageChannel').publish({
+                "type": "PureCloud.subscribe",
+ 				"data": {
+     				"type": "Notification",
+     				"categories": ["chatUpdate", "messageUpdate", "conversationTranscription"]
+  				}
+            });
         }
         
-        if (eventData && eventData.category === 'change' && eventData.type === "Interaction" && eventData.data.new.isMessage == true) {
-            helper.getConversation(component, eventData.data.new.id);
+        //handle conversationTranscription events, which are voice transcriptions
+        if (eventData && eventData.category === 'conversationTranscription') {
+            helper.handleConversationTranscription(component, eventData);
         }
-
-        //Act on Interaction events when a new interaction is added that is not a chat
-        if (eventData && eventData.type === 'Interaction' && eventData.category === 'add' && eventData.data.isChat != true && eventData.data.isMessage != true) {
-            //Look for a participant attribute with the key "Call_Reason" and, if present, preload the knowledge suggestions
-            helper.getCallReason(component, eventData.data.id);
-            
-            //Create a websocket for transcript notifications and pipe the data into the knowledge suggestion process
-            helper.transcriptionNotifications(component, eventData.data.id);
+        
+        //handle messaging and web chat update events
+        if (eventData && (eventData.category === 'messageUpdate' || eventData.category === 'chatUpdate')) {
+            helper.handleMessageUpdate(component, eventData);
         }
     }
 })
