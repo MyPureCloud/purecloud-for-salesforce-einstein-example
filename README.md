@@ -34,7 +34,7 @@ This repository contains a Salesforce Lightning component, Apex classes, and sup
 
 ## Installation
 
-Install the [unmanaged package](https://login.salesforce.com/packaging/installPackage.apexp?p0=04t3i000000RQru).
+Install the [unmanaged package](https://login.salesforce.com/packaging/installPackage.apexp?p0=04t8c000001QxLA).
 
 ## Configuration
 
