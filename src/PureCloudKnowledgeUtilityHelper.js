@@ -85,7 +85,8 @@
         if (eventData && eventData.data.messages) {
             var x = eventData.data.messages.length - 1;
             if (eventData.data.messages[x].role == "customer") {
-				this.updateNextBestAction(component, eventData.data.messages[x].body);
+                //UNCOMMENT LINE BELOW TO ENABLE EINSTEIN NEXT BEST ACTION INTEGRATION
+				//this.updateNextBestAction(component, eventData.data.messages[x].body);
                 this.getKnowledgeProbabilities(component, eventData.data.messages[x].body);
             }
         }

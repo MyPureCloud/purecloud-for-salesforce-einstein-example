@@ -3,7 +3,8 @@
     <lightning:messageChannel type="purecloud__ClientEvent__c" aura:id="clientEventMessageChannel" onMessage="{!c.onClientEvent}" scope="APPLICATION"/>
     <aura:attribute name="knowledgeArticles" type="List"/>
     <aura:attribute name="numResults" type="Integer" default="0"/>
-    <aura:registerEvent name="refreshEvent" type="markup://lightning:nextBestActionsRefresh" />
+    <!-- UNCOMMENT LINE BELOW IF WANTING TO ADD EINSTEIN NEXT BEST ACTION INTEGRATION -->
+    <!-- <aura:registerEvent name="refreshEvent" type="markup://lightning:nextBestActionsRefresh" /> -->
     <div>
         <div class="forceRelatedListCardHeader slds-grid slds-page-header">
             <h1>Suggested Knowledge Articles</h1>

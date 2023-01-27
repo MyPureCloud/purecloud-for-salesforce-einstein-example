@@ -103,24 +103,20 @@ These steps use the example dataset in the [einstein-example-dataset.csv](resour
    If you did not upload the **einstein_platform.pem** file in step 3, then also add **ACCESS_TOKEN**. The unmanaged package uses this access token.
 5. Add the **PureCloudKnowledgeUtility** Lightning component as a [utility item](https://help.salesforce.com/articleView?id=dev_apps_lightning_utilities.htm&type=0) to a Lightning app. This Lightning app must have an Open CTI Softphone.<br />
    **Note**: Be sure to select **Start automatically**.
+6. Alternatively, add the lightning component into any object's page if preferred over a utility item.
 
-### Update the PureCloudKnowledgeUtility bundle for Lightning Deployments
+### Update code if you want to enable Einstein Next Best Action integration
 
-If you're running Salesforce Lightning then run through the following steps:
-
-1. In your Salesforce organization, search for Installed Packages in the administrative portal using the quick find tool.
-2. Open the unmanaged package for the knowledge utility
-3. Click "View Components"
-4. Open the Aura Component Bundle item (e.g. "PureCloudKnowledgeUtility")
-5. Click the "Developer Console" button
-6. Uncomment the line according to the instructions in the code (i.e. remove the <!-- and --> from the beginning and end of the line, respectively)
-7. Click File / Save
+1. Update the Case object by adding a custom field with the API name Last_utterance__c configured as a text field. This will receive the transcript utterances that Einstein NBA strategies will evaluate. (Alternatively, change the field name to which the update targets within line 158 of the file PureCloudKnowledgeUtilityController.apxc...this code can be extended to support multiple objects, as well)
+2. Uncomment lines 154-165 of the file PureCloudKnowledgeUtilityController.apxc
+3. Uncomment line 89 of the file PureCloudKnowledgeUtilityHelper.js
+4. Uncomment line 7 of the file PureCloudKnowledgeUtility.cmp
 
 ## Usage
 
 1. Send an ACD chat message, digital message, or make a call to a transcription-enabled voice queue in Genesys Cloud for Salesforce.
 2. As the customer, send or say a message that corresponds with the dataset that was used to train Einstein.
-3. Open the Lightning component. The Lightning component updates with articles related to the chat message.
+3. Open the Lightning component. The Lightning component updates with articles related to the interaction.
 4. Click an article. Confirm that the article opens inside Salesforce.
 
 
