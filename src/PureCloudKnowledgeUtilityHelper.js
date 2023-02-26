@@ -75,7 +75,8 @@
         if (eventData && eventData.data.transcripts) {
             var x = eventData.data.transcripts.length - 1;
             if (eventData.data.transcripts[x].channel == "EXTERNAL") {
-                this.updateNextBestAction(component, eventData.data.transcripts[x].alternatives[0].transcript);
+                //UNCOMMENT LINE BELOW TO ENABLE EINSTEIN NEXT BEST ACTION INTEGRATION
+                //this.updateNextBestAction(component, eventData.data.transcripts[x].alternatives[0].transcript);
                 this.getKnowledgeProbabilities(component, eventData.data.transcripts[x].alternatives[0].transcript);
             }
         }
