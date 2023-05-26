@@ -145,23 +145,4 @@ public with sharing class PureCloudKnowledgeUtilityController {
             }
         }
     }
-
-    //Find object and update Last_utterance__c with interaction utterance
-    //UNCOMMENT TO ENABLE EINSTEIN NEXT BEST ACTION INTEGRATION ... REQUIRES
-    //A CUSTOM FIELD ON THE CASE OBJECT NAMED Last_utterance__c DEFINED AS A STRING
-    //TO RECEIVE THE UTTERANCES FROM THE TRANSCRIPTION ENGINE
-    /*
-    @auraEnabled
-    public static void updateLastUtterance(String recordId, String utterance){
-        Case caseToUpdate;
-        try {
-            caseToUpdate = [SELECT Last_utterance__c FROM Case WHERE Id = :recordId];
-            caseToUpdate.Last_utterance__c = utterance;
-            update caseToUpdate;
-        }
-        catch (DmlException e) {
-            System.debug('updateLastUtterance error: ' + e.getMessage());
-        }
-    }
-    */
 }
