@@ -26,9 +26,12 @@
         $A.enqueueAction(action);
     },
     
-    getChatProbabilities : function (component, searchValue) {
-    	var action = component.get("c.calculateChatIntent");
-        action.setParams({'chat' : searchValue.messages[searchValue.messages.length - 1].body}); 
+    getKnowledgeProbabilities : function (component, searchValue) {
+    	var action = component.get("c.calculateIntent");
+        if (searchValue.messages)
+	        action.setParams({'utterance' : searchValue.messages[searchValue.messages.length - 1].body});
+        else
+            action.setParams({'utterance' : searchValue});
         action.setCallback(this, function(response) {
             var state = response.getState();
             
@@ -46,7 +49,7 @@
                     this.clear(component);
                 }
             } else {
-                this.handleResponseError("Error getting chat probabilities: ", response);
+                this.handleResponseError("Error getting knowledge probabilities: ", response);
             }
         });
         $A.enqueueAction(action);
@@ -55,6 +58,24 @@
     clear : function(component) {
         component.set('v.knowledgeArticles', []);
         component.set('v.numResults', 0);
+    },
+
+    handleConversationTranscription : function(component, eventData) {
+        if (eventData && eventData.data.transcripts) {
+            var x = eventData.data.transcripts.length - 1;
+            if (eventData.data.transcripts[x].channel == "EXTERNAL") {
+                this.getKnowledgeProbabilities(component, eventData.data.transcripts[x].alternatives[0].transcript);
+            }
+        }
+    },
+
+    handleMessageUpdate : function(component, eventData) {
+        if (eventData && eventData.data.messages) {
+            var x = eventData.data.messages.length - 1;
+            if (eventData.data.messages[x].role == "customer") {
+                this.getKnowledgeProbabilities(component, eventData.data.messages[x].body);
+            }
+        }
     },
 
     handleResponseError: function(errorMsg, response) {

@@ -20,8 +20,26 @@
     },
     onClientEvent: function (component, message, helper) {
         var eventData = message.getParams();
-        if (eventData && eventData.type === 'Notification' && eventData.category === 'chatUpdate') {
-            helper.getChatProbabilities(component, eventData.data);
+        
+        //subscribe to notification events on Lightning Message Channel
+        if (eventData && eventData.type === 'InitialSetup') {
+            component.find('clientEventMessageChannel').publish({
+                "type": "PureCloud.subscribe",
+ 				"data": {
+     				"type": "Notification",
+     				"categories": ["chatUpdate", "messageUpdate", "conversationTranscription"]
+  				}
+            });
+        }
+        
+        //handle conversationTranscription events, which are voice transcriptions
+        if (eventData && eventData.category === 'conversationTranscription') {
+            helper.handleConversationTranscription(component, eventData);
+        }
+        
+        //handle messaging and web chat update events
+        if (eventData && (eventData.category === 'messageUpdate' || eventData.category === 'chatUpdate')) {
+            helper.handleMessageUpdate(component, eventData);
         }
     }
 })

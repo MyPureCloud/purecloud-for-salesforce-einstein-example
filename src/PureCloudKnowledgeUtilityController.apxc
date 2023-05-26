@@ -40,7 +40,7 @@ public with sharing class PureCloudKnowledgeUtilityController {
     }
     
     @auraEnabled
-    public static List<Probabilities> calculateChatIntent(String chat) {
+    public static List<Probabilities> calculateIntent(String utterance) {
         List<Probabilities> probabilities = new List<Probabilities>();
         try {
             String intentEndpoint = 'https://api.einstein.ai/v2/language/intent';
@@ -60,7 +60,7 @@ public with sharing class PureCloudKnowledgeUtilityController {
             request.setHeader('Authorization', 'Bearer ' + accessToken);
             request.setHeader('Content-type', 'application/json');        
             
-            String body = '{\"modelId\":\"'+ sentimentModel + '\",\"document\":\"' + chat + '\"}';
+            String body = '{\"modelId\":\"'+ sentimentModel + '\",\"document\":\"' + utterance + '\"}';
             request.setBody(body);        
             HTTPResponse res = http.send(request);  
             Integer responseCode = res.getStatusCode();
@@ -144,5 +144,5 @@ public with sharing class PureCloudKnowledgeUtilityController {
                 }
             }
         }
-    } 
+    }
 }
