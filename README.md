@@ -105,13 +105,6 @@ These steps use the example dataset in the [einstein-example-dataset.csv](resour
    **Note**: Be sure to select **Start automatically**.
 6. Alternatively, add the lightning component into any object's page if preferred over a utility item.
 
-### Update code if you want to enable Einstein Next Best Action integration
-
-1. Update the Case object by adding a custom field with the API name Last_utterance__c configured as a text field. This will receive the transcript utterances that Einstein NBA strategies will evaluate. (Alternatively, change the field name to which the update targets within line 158 of the file PureCloudKnowledgeUtilityController.apxc...this code can be extended to support multiple objects, as well)
-2. Uncomment lines 154-165 of the file PureCloudKnowledgeUtilityController.apxc
-3. Uncomment line 89 of the file PureCloudKnowledgeUtilityHelper.js
-4. Uncomment line 7 of the file PureCloudKnowledgeUtility.cmp
-
 ## Usage
 
 1. Send an ACD chat message, digital message, or make a call to a transcription-enabled voice queue in Genesys Cloud for Salesforce.
