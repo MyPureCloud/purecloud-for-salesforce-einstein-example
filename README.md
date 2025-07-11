@@ -27,7 +27,7 @@ This repository contains a Salesforce Lightning component, Apex classes, and sup
 ## Prerequisites
 
 * Genesys Cloud for Salesforce Version 4.1 or later installed in your Salesforce organization.
-  For more information, see [Set up the Genesys Cloud for Salesforce integration](https://help.mypurecloud.com/?p=39326).
+  For more information, see [Set up the Genesys Cloud for Salesforce integration](https://help.genesys.cloud/?p=39326).
   * Version of the [Genesys Cloud for Salesforce](https://appexchange.salesforce.com/appxListingDetail?listingId=a0N30000000pvMdEAI) managed package that supports Lightning Message Service.
 * ACD chat working in your Genesys Cloud organization.
 
